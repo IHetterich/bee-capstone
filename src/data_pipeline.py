@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+#Instantiating a few lists to aid in the parsing of the raw data and then establishing it as a Pandas Dataframe
+
 states = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado",
   "Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois",
   "Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland",
@@ -20,6 +22,16 @@ columns = ['state', 'numcol', 'yieldpercol', 'totalprod', 'stocks', 'priceperlb'
 def clean_raw_data(file, num):
     '''
     Takes in a raw txt file and returns a list of lists breaking down info by state.
+
+    Parameters
+    ----------
+    file - The filepath to the raw data.
+
+    num - The year of the associated data.
+
+    Returns
+    ----------
+    year - A list of sublists, each sublist representing the data from a single state.
     '''
 
     year = open(file, 'r').read()
@@ -50,12 +62,36 @@ def clean_raw_data(file, num):
     return year
 
 def collate_raw(lst):
+    '''
+    Takes in any number of raw data text files and merges them into a single Pandas Dataframe using clean_raw_data.
+
+    Parameters
+    ----------
+    lst - A list of sublist, each sublist containing a file path and associated year as needed by clean_raw_data.
+
+    Return
+    ----------
+    new - A Pandas Dataframe of all cleaned data.
+    '''
+
     new = []
     for pair in lst:
         new.extend(clean_raw_data(pair[0], pair[1]))
-    return new
+    return pd.DataFrame(new, columns=columns)
 
 def write_csv(original, new, file_path):
+    '''
+    Combines newly cleaned data  with any pre-existing cleaned data and writes a new csv file of said combination.
+
+    Parameters
+    ----------
+    original - A file path to a .csv containing any previous data.
+
+    new - A Pandas Dataframe of any newly cleaned data.
+
+    file_path - A filepath to where the newly combined dataframe should be saved as a .csv file.
+    '''
+
     full = pd.concat([original, new], ignore_index=True)
     full.to_csv(file_path, index=False)
 
@@ -69,7 +105,7 @@ if __name__ == '__main__':
             ['data/2018.txt',2018],
             ['data/2019.txt',2019]]
 
-    new = pd.DataFrame(collate_raw(years), columns=columns)
+    new = collate_raw(years)
     old = pd.read_csv('data/honeyproduction.csv')
 
     write_csv(old, new, 'data/full.csv')
