@@ -11,3 +11,19 @@ Bees of course play in incredibly vital role in their ecosystems as pollinators.
 - More than just the colonies, how has the honey industry been effecting in the wake of this colony die-off?
 
 ## The Data
+Gotta talk about sourcing and cleaning.
+
+## Visualizing Bee Populations
+Needs a better section title first off. Get some nice visualizations of hive population over time to show a clear trend towards growth.
+
+## Hypothesis Testing
+Run through bootstrap methodology and arrive at a p-value that doesn't allow us to reject the null hypothesis.
+
+## The Honey Industry
+Run through visualizations of honey production metrics, show the strong correlation between price and total value and the non-existent correlation elsewhere. Look into honey industry reports for some kind of explanation or elaboration.
+
+## Conclusion
+Overall hopeful outlook even without a nice p-value (maybe a graph of p values from 09 onward showing a trend?) Maybe highlight how insane ND is.
+
+## Sources and acknowledgements
+Self-explanatory
