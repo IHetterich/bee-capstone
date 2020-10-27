@@ -15,9 +15,10 @@ The focus on domestic bee colonies in the questions above is due to the nature o
 
 Data was sourced at first from a [kaggle dataset](https://www.kaggle.com/jessicali9530/honey-production) for 1998-2012. I was hoping to extend this dataset to the present so I tracked down the original source, the [Annual Honey Report](https://usda.library.cornell.edu/concern/publications/hd76s004z?locale=en) published every spring by the NASS (National Agricultural Statistics Service). From there I took the corresponding tables as seen below and developed a script to automate the cleaning process.
 <p align='center'>
-<img src='images/raw_data.png' alt='Raw format of data' width=400>
+<img src='images/raw_data.png' alt='Raw format of data' width=600>
 </p>
 Once cleaned the data was merged with the kaggle dataset and a new complete csv was written, it can be found in this repositories data directory.
+
 
 In terms of quality the data is wonderful, all listed states in the report have values for every field so nan values were not an issue. Furthermore I was able to keep all the columns present as they covered exactly the information I was looking for. That said several states we not present in every year's report. Whichever states were omitted were bundled into a single field in order to not disclose data for individual operations. That said even the sum of these states was small and as such I omitted them from my study in order to ensure consistent data for all years from 1998-2019.
 
