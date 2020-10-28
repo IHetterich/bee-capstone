@@ -88,10 +88,10 @@ def avg_vs_large(df):
     ca = df[df['state'] == 'CA']
     sd = df[df['state'] == 'SD']
     fig, ax = plt.subplots(figsize=(10,5))
-    ax.plot(nd['year'], nd['numcol'], label='North Dakota', color='b')
-    ax.plot(ca['year'], ca['numcol'], label='California', color='olive')
-    ax.plot(sd['year'], sd['numcol'], label='South Dakota', color='m')
-    ax.plot(avgs['year'], avgs['numcol'], label='National Average', color='r')
+    ax.plot(nd['year'], nd['numcol'], label='North Dakota', color='b', linewidth=2)
+    ax.plot(ca['year'], ca['numcol'], label='California', color='olive', linewidth=2)
+    ax.plot(sd['year'], sd['numcol'], label='South Dakota', color='m', linewidth=2)
+    ax.plot(avgs['year'], avgs['numcol'], label='National Average', color='r', linewidth=2)
     ax.set_ylim(0,540000)
     ax.set_title('National Average and Outlier States', fontsize=20)
     ax.set_xlabel('Years', fontsize=15)

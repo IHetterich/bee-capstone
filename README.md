@@ -39,7 +39,16 @@ Looking at these a few things caught my attention. Firstly while there does seem
 And we can immediately see that they are outliers to put it mildly. At the lowest point in South Dakota's hit still had roughly 3 times as many colonies as the national average. While good news on whole, knowing that CCD hasn't been more than a speed bump to the growth in ND and SD and only a slight contributor to the general decline in CA, these incredibly high numbers are going to pose a challenge in trying to see if the rest of the country has recovered.
 
 ## Hypothesis Testing
-Run through bootstrap methodology and arrive at a p-value that doesn't allow us to reject the null hypothesis.
+Well our first step, as always with hypothesis testing, is to come up with some hypotheses. In particular our null and alternative:
+<p align='center'>
+<b>H<sub>0</sub>: Our current &mu; = Our lowest &mu; <br>
+H<sub>A</sub>: Our current &mu; > Our lowest &mu; </b>
+</p>
+To quickly summarize we're starting with a null hypothesis that the average of our current population is actually the same as it was in 2008, at our lowest point in the dataset. Our alternative is that our current population average is actually higher. In our final step before collecting data we'll select an alpha value of .05, mainly because it's good standard and I want to feel confident in the result.
+
+Now in order to test this we'll need to find estimations of the population average for 2008 and 2019 as well as the variance of that estimation in 2008. Since we're working with essentially a single sample for each year with a sample size of 39 we'll have to rely on [bootstrapping](https://en.wikipedia.org/wiki/Bootstrapping_%28statistics%29) for those estimations. Our final consideration before doing that analysis though has to be the outliers we discovered earlier. Seeing as they are so distant from the mean, and also represent states that barely felt the effects of CCD we're going to be discounting them to focus on the recovery of the rest of the country.
+
+The exact process can be found in src/hypothesis_testing.py but in short 10*6 resamples were taken from our 2008 and 2019 and means were compared leading to a p-Value of .08. While close this doesn't reach the threshold we set and as such we can't reject our null hypothesis.
 
 ## The Honey Industry
 Run through visualizations of honey production metrics, show the strong correlation between price and total value and the non-existent correlation elsewhere. Look into honey industry reports for some kind of explanation or elaboration.
