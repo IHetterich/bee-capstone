@@ -19,11 +19,24 @@ Data was sourced at first from a [kaggle dataset](https://www.kaggle.com/jessica
 </p>
 Once cleaned the data was merged with the kaggle dataset and a new complete csv was written, it can be found in this repositories data directory.
 
-
-In terms of quality the data is wonderful, all listed states in the report have values for every field so nan values were not an issue. Furthermore I was able to keep all the columns present as they covered exactly the information I was looking for. That said several states we not present in every year's report. Whichever states were omitted were bundled into a single field in order to not disclose data for individual operations. That said even the sum of these states was small and as such I omitted them from my study in order to ensure consistent data for all years from 1998-2019.
+In terms of quality the data is wonderful, all listed states in the report have values for every field so nan values were not an issue. Furthermore I was able to simply keep all the columns present as they covered exactly the information I was looking for. That said several states we not present in every year's report. Whichever states were omitted were bundled into a single field in order to not disclose data for individual operations. That said even the sum of these states was small and as such I omitted them from my study in order to ensure consistent data for all years from 1998-2019.
 
 ## Visualizing Bee Populations
-Needs a better section title first off. Get some nice visualizations of hive population over time to show a clear trend towards growth.
+Our first question of how bee populations have responded in the wake of CCD is an easy one to dive into. A great place to start is in looking at our national average across our time span of 1998 - 2020.
+<p align='center'>
+<img src='images/avg_cols.png' alt='Average colonies' width=400>
+</p>
+Now right off the bat I for one was surprised at this rate of loss in 2004-2008. While it's clear to see I was expecting something a lot more drastic based on what I knew about CCD. While this dip does represent a loss of tens of thousands of hives I expected more severity. As for the recovery of colonies it appears that we have not only returned to but surpassed colony levels from before CCD. But this is afterall an average, so maybe the picture will be clearer if we break it down by state.
+
+<p align='center'>
+<img src='images/map_2008.png' alt='Map of colonies in 2008' width=275>
+<img src='images/map_2019.png' alt='Map of colonies in 2019' width=275>
+</p>
+Looking at these a few things caught my attention. Firstly while there does seem to be a definite increase in hives it doesn't appear that dramatic. Secondly there seems to be no change in North Dakota, South Dakota, and California. In fact they seem to have had plentiful hives even at the lowest point nationally in the past 21 years. I was curious how their numbers looked compared to the national trend.
+<p align='center'>
+<img src='images/avg_vs_large.png' alt='Map of colonies in 2008' width=400>
+</p>
+And we can immediately see that they are outliers to put it mildly. At the lowest point in South Dakota's hit still had roughly 3 times as many colonies as the national average. While good news on whole, knowing that CCD hasn't been more than a speed bump to the growth in ND and SD and only a slight contributor to the general decline in CA, these incredibly high numbers are going to pose a challenge in trying to see if the rest of the country has recovered.
 
 ## Hypothesis Testing
 Run through bootstrap methodology and arrive at a p-value that doesn't allow us to reject the null hypothesis.

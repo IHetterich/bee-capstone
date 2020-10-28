@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import scipy.stats as stats
 
-def restrict_to_full(df):
+def restrict(df):
     '''
-    Removes the information for states that do not have data for the full span of years.
+    Removes the information for states that do not have data for the full span of years, as well as outliers.
 
     Parameters
     ----------
@@ -15,8 +15,8 @@ def restrict_to_full(df):
     A Pandas Dataframe with 5 states removed.
     '''
 
-    low_states = ['MD', 'NM', 'NV', 'OK', 'SC']
-    return df[~df.state.isin(low_states)]
+    removal_states = ['MD', 'NM', 'NV', 'OK', 'SC', 'ND', 'CA', 'SD']
+    return df[~df.state.isin(removal_states)]
 
 def restrict_to_year_col(df, year, col):
     '''
@@ -38,7 +38,7 @@ def restrict_to_year_col(df, year, col):
 
     return df[df['year'] == year][col].to_numpy()
 
-def bootstrap_mean(data, samples=10**4):
+def bootstrap_mean(data, samples=10**6):
     '''
     Bootstraps a given sample to find an approximation of the mean of the population and 
     returns that mean and the standard deviation of that bootstrapped mean.
@@ -79,8 +79,8 @@ def hypothesis_testing(df, null_year, test_year, col):
 
     col - The column of data fro the dataframe that we are testing.
     '''
-    null_data = restrict_to_year_col(restrict_to_full(df), null_year, col)
-    test_data = restrict_to_year_col(restrict_to_full(df), test_year, col)
+    null_data = restrict_to_year_col(restrict(df), null_year, col)
+    test_data = restrict_to_year_col(restrict(df), test_year, col)
 
     null_mean, null_std = bootstrap_mean(null_data)
     test_mean, test_std = bootstrap_mean(test_data)
