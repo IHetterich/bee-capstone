@@ -29,8 +29,8 @@ Our first question of how bee populations have responded in the wake of CCD is a
 Now right off the bat I for one was surprised at this rate of loss in 2004-2008. While it's clear to see I was expecting something a lot more drastic based on what I knew about CCD. While this dip does represent a loss of tens of thousands of hives I expected more severity. As for the recovery of colonies it appears that we have not only returned to but surpassed colony levels from before CCD. But this is afterall an average, so maybe the picture will be clearer if we break it down by state.
 
 <p align='center'>
-<img src='images/map_2008.png' alt='Map of colonies in 2008', width=800>
-<img src='images/map_2019.png' alt='Map of colonies in 2019', width=800>
+<img src='images/map_2008.png' alt='Map of colonies in 2008', width=800, height=300>
+<img src='images/map_2019.png' alt='Map of colonies in 2019', width=800, height=300>
 </p>
 
 Looking at these a few things caught my attention. Firstly while there does seem to be a definite increase in hives it doesn't appear that dramatic. Secondly there seems to be no change in North Dakota, South Dakota, and California. In fact they seem to have had plentiful hives even at the lowest point nationally in the past 21 years. I was curious how their numbers looked compared to the national trend.
