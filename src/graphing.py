@@ -5,6 +5,7 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 import geopandas as geo
 from data_handler import DataHandler
+from hypothesis_testing import *
 plt.style.use('ggplot')
 
 def geo_plot_cols(df_in, year, save_file):
@@ -87,16 +88,16 @@ def avg_vs_large(df, save_file):
     ax.legend()
     plt.savefig(save_file)
 
-def graph_p_trend(save_file):
+def graph_p_trend(df, year, save_file):
     '''
     Graphs the p-values over a given number of years. Needs updating to 
     allow for input when called.
     '''
 
-    p = [0.8484881181188515, 0.6774445778008072, 0.8742513963611638, 0.7554420590236682, 0.5784368740046202, 0.46686840125275564, 0.5256868182957398, 0.3941496099894497, 0.4993195517295863, 0.4217370653718848, 0.4033256486903477]
-    years = list(range(2009,2020))
+    p = p_trend(df, 2008, year)
+    years = list(range(2009,year+1))
     fig, ax = plt.subplots()
-    ax.plot(years, p, linewidth=2)
+    ax.plot(years, p, color='b', linewidth=2)
     ax.set_title('p-Values Over Time', fontsize=20)
     ax.set_xlabel('Years', fontsize=15)
     ax.set_ylabel('p-Values', fontsize=15)
@@ -108,19 +109,21 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--data', type=str,
         default='/Users/ianhetterich/Desktop/Galvanize/capstones/bee-capstone/data/complete_data.csv', 
         help='The raw data file path')
-    parser.add_argument('-g', '--graph', type=str, 
+    parser.add_argument('-s', '--save', type=str, 
         help='The final graph file path')
     parser.add_argument('-y', '--year', type=int, default=2008, 
         help='The year in question if applicable')
     args = parser.parse_args()
     source_path = args.data
-    save_path = args.graph
+    save_path = args.save
     year = args.year
 
-    data = DataHandler(source_path).geo
+    handler = DataHandler(source_path)
+    data = handler.geo
+    p_data = handler.stat
 
     #To Do: Add in an additional argument and a conditional gate to 
     # specify functionality
 
-    geo_plot_cols(data, year, save_path)
+    graph_p_trend(p_data, year, save_path)
     
