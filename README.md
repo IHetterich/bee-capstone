@@ -8,7 +8,6 @@ Bees of course play in incredibly vital role in their ecosystems as pollinators.
 ## Questions
 - How have domestic bee populations responded after the uptick in CCD?
 - If they are recovering to what extent can we see that?
-- More than just the colonies, how has the honey industry been effecting in the wake of this colony die-off?
 
 ## The Data
 The focus on domestic bee colonies in the questions above is due to the nature of the data we are working with. While domestic honey producers have to register their operations with the USDA wild colonies obviously don't and as such the only complete data we have is for domestic colonies.
@@ -17,7 +16,7 @@ Data was sourced at first from a [kaggle dataset](https://www.kaggle.com/jessica
 <p align='center'>
 <img src='images/raw_data.png' alt='Raw format of data' width=600>
 </p>
-Once cleaned the data was merged with the kaggle dataset and a new complete csv was written, it can be found in this repositories data directory.
+Once cleaned the data was merged with the kaggle dataset and a new complete csv was written, it can be found in this repository's data directory.
 
 In terms of quality the data is wonderful, all listed states in the report have values for every field so nan values were not an issue. Furthermore I was able to simply keep all the columns present as they covered exactly the information I was looking for. That said several states we not present in every year's report. Whichever states were omitted were bundled into a single field in order to not disclose data for individual operations. That said even the sum of these states was small and as such I omitted them from my study in order to ensure consistent data for all years from 1998-2019.
 
@@ -29,8 +28,8 @@ Our first question of how bee populations have responded in the wake of CCD is a
 Now right off the bat I for one was surprised at this rate of loss in 2004-2008. While it's clear to see I was expecting something a lot more drastic based on what I knew about CCD. While this dip does represent a loss of tens of thousands of hives I expected more severity. As for the recovery of colonies it appears that we have not only returned to but surpassed colony levels from before CCD. But this is afterall an average, so maybe the picture will be clearer if we break it down by state.
 
 <p align='center'>
-<img src='images/map_2008.png' alt='Map of colonies in 2008' width=400>
-<img src='images/map_2019.png' alt='Map of colonies in 2019' width=400>
+<img src='images/map_2008.png' alt='Map of colonies in 2008'>
+<img src='images/map_2019.png' alt='Map of colonies in 2019'>
 </p>
 Looking at these a few things caught my attention. Firstly while there does seem to be a definite increase in hives it doesn't appear that dramatic. Secondly there seems to be no change in North Dakota, South Dakota, and California. In fact they seem to have had plentiful hives even at the lowest point nationally in the past 21 years. I was curious how their numbers looked compared to the national trend.
 <p align='center'>
@@ -41,25 +40,23 @@ And we can immediately see that they are outliers to put it mildly. At the lowes
 ## Hypothesis Testing
 Well our first step, as always with hypothesis testing, is to come up with some hypotheses. In particular our null and alternative:
 <p align='center'>
-<b>H<sub>0</sub>: Our current &mu; = Our lowest &mu; <br>
-H<sub>A</sub>: Our current &mu; > Our lowest &mu; </b>
+<b>H<sub>0</sub>: &mu; of 2008 = &mu; of 2019<br>
+H<sub>A</sub>: &mu; of 2008 < &mu; of 2019</b>
 </p>
-To quickly summarize we're starting with a null hypothesis that the average of our current population is actually the same as it was in 2008, at our lowest point in the dataset. Our alternative is that our current population average is actually higher. In our final step before collecting data we'll select an alpha value of .05, mainly because it's good standard and I want to feel confident in the result.
+To quickly summarize we're starting with a null hypothesis that the mean of our current population is actually the same as it was in 2008, at our lowest point in the dataset. Our alternative is that our current population average is actually higher. Our next two steps before we actually start doing math are settling on a test and selecting an alpha value. Since we're testing whether two samples are drawn from the same population or not the obvious answer is a [Students t-test](https://en.wikipedia.org/wiki/Student%27s_t-test) which was developed for this exact purpose. As for our alpha, how certain we want to be that they are in fact different, we'll go for the standard value of .05.
 
-Now in order to test this we'll need to find estimations of the population average for 2008 and 2019 as well as the variance of that estimation in 2008. Since we're working with essentially a single sample for each year with a sample size of 39 we'll have to rely on [bootstrapping](https://en.wikipedia.org/wiki/Bootstrapping_%28statistics%29) for those estimations. Our final consideration before doing that analysis though has to be the outliers we discovered earlier. Seeing as they are so distant from the mean, and also represent states that barely felt the effects of CCD we're going to be discounting them to focus on the recovery of the rest of the country.
-<p align='center'> 
-<img src='images/bootstrap.png' alt='Bootstrapping results'>
-</p>
-The exact process can be found in src/hypothesis_testing.py but in short 10*6 resamples were taken from each 2008 and 2019 and means were compared leading to a p-Value of .08. While close this doesn't reach the threshold we set and as such we can't reject our null hypothesis.
+When we run our test using `scipy.stats.ttest_ind()` and feeding in our samples from 2008 and 2019 the results are less than exciting to put it plainly. We arrive at a p-value of .40, very much above our threshold of rejection. As such we've failed to reject our null hypothesis and we can't say that there's statistical evidence that bee populations have substantively recovered since 2008.
 
-## The Honey Industry
-Run through visualizations of honey production metrics, show the strong correlation between price and total value and the non-existent correlation elsewhere. Look into honey industry reports for some kind of explanation or elaboration.
+## Conclusion and Further Steps
+So where does this leave us? While it seems like the population is recovering when we look at the population trends we can't confirm that through hypothesis testing. So what good is a hunch without proof? How much longer do I have to lose sleep thinking about the threat that CCD poses to bee colonies?
 
-## Conclusion
-Overall hopeful outlook even without a nice p-value (maybe a graph of p values from 09 onward showing a trend?) Maybe highlight how insane ND is.
+Well as it turns out even though we can't reject our null hypothesis currently I'm fully confident that they are in fact recovering. Whenever testing a hypothesis over time it's important to view the p-values of many points in time. The latest date may be the most immediately interesting but in order to really be confident that a change has happened you have to protect yourself from fluke years. For instance if bees had one really good year and their population skyrocketed you could get a p-value under .05, but if that population falls right back down the next year that's no kind of real recovery. As such the key is to look at the trend of p-values, if real recovery is occuring they'll start trending towards 0, just like it's suggested in the graph below.
 <p align='center'> 
 <img src='images/p_value_trend.png' alt='Bootstrapping results'>
 </p>
+While we don't have that many data points yet it does seem like a trend is emerging. So while it may not be time to open a bottle of champagne just yet, it looks like that day isn't too far away. We just have to wait and see where further data leads us.
+
+While we wait for that data, however, there is plenty of other things to dig into. In fact we haven't touched the majority of the data in our dataset that pertains to actual honey production. My next steps on this analysis are going to focus on how the honey industry has responded to the CCD crisis. Another point of interest moving forward will be
 
 ## Sources and acknowledgements
 Self-explanatory

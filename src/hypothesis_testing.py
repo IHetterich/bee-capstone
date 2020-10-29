@@ -38,67 +38,71 @@ def restrict_to_year_col(df, year, col):
 
     return df[df['year'] == year][col].to_numpy()
 
-def bootstrap_mean(data, samples=10**6):
-    '''
-    Bootstraps a given sample to find an approximation of the mean of the population and 
-    returns that mean and the standard deviation of that bootstrapped mean.
+# def bootstrap_mean(data, samples=10**6):
+#     '''
+#     Bootstraps a given sample to find an approximation of the mean of the population and 
+#     returns that mean and the standard deviation of that bootstrapped mean.
 
-    Parameters
-    ----------
-    data - An ndarray of the sample we are bootstrapping.
+#     Parameters
+#     ----------
+#     data - An ndarray of the sample we are bootstrapping.
 
-    samples - The number of bootstraps to take, defaulted at 10,000.
+#     samples - The number of bootstraps to take, defaulted at 10,000.
 
-    Returns
-    ----------
-    mean - The result of the bootstrapped mean.
+#     Returns
+#     ----------
+#     mean - The result of the bootstrapped mean.
 
-    std - The standard deviation of the bootstrapped mean.
-    '''
+#     std - The standard deviation of the bootstrapped mean.
+#     '''
 
-    bootstrap = []
-    for i in range(samples):
-        sample = np.random.choice(data, size=len(data), replace=True)
-        bootstrap.append(np.mean(sample))
-    return np.mean(bootstrap), np.std(bootstrap)
+#     bootstrap = []
+#     for i in range(samples):
+#         sample = np.random.choice(data, size=len(data), replace=True)
+#         bootstrap.append(np.mean(sample))
+#     return np.mean(bootstrap), np.std(bootstrap)
 
-def hypothesis_testing(df, null_year, test_year, col):
-    '''
-    Takes in a dataframe, a year for the null hypothesis, a year for an alternate hypothesis
-    and a column to test in the data frame. Pulls relevant data from the dataframe and then 
-    bootstraps a mean to contruct a normally distributed fit for generating a p-value. It then
-    prints out the p-value that was found, as well as the mean and std from the bootstrapping.
+# def hypothesis_testing(df, null_year, test_year, col):
+#     '''
+#     Takes in a dataframe, a year for the null hypothesis, a year for an alternate hypothesis
+#     and a column to test in the data frame. Pulls relevant data from the dataframe and then 
+#     bootstraps a mean to contruct a normally distributed fit for generating a p-value. It then
+#     prints out the p-value that was found, as well as the mean and std from the bootstrapping.
 
-    Parameters
-    ----------
-    df - A dataframe containing all the data in question.
+#     Parameters
+#     ----------
+#     df - A dataframe containing all the data in question.
 
-    null_year - The year of data we are using to construct our null hypothesis.
+#     null_year - The year of data we are using to construct our null hypothesis.
 
-    test_year - The year of data we are using to test out null hypothesis.
+#     test_year - The year of data we are using to test out null hypothesis.
 
-    col - The column of data fro the dataframe that we are testing.
-    '''
-    null_data = restrict_to_year_col(restrict(df), null_year, col)
-    test_data = restrict_to_year_col(restrict(df), test_year, col)
+#     col - The column of data fro the dataframe that we are testing.
+#     '''
+#     null_data = restrict_to_year_col(restrict(df), null_year, col)
+#     test_data = restrict_to_year_col(restrict(df), test_year, col)
 
-    null_mean, null_std = bootstrap_mean(null_data)
-    test_mean, test_std = bootstrap_mean(test_data)
+#     null_mean, null_std = bootstrap_mean(null_data)
+#     test_mean, test_std = bootstrap_mean(test_data)
 
-    null_dist = stats.norm(loc=null_mean, scale = null_std)
-    p = 1 - null_dist.cdf(test_mean)
+#     null_dist = stats.norm(loc=null_mean, scale = null_std)
+#     p = 1 - null_dist.cdf(test_mean)
 
-    print(f'p-Value: {p}')
-    print(f'Null hypothesis\nMean: {null_mean}\nSTD: {null_std}')
-    print(f'Test Data\nMean: {test_mean}\nSTD: {test_std}')
-    return p
+#     print(f'p-Value: {p}')
+#     print(f'Null hypothesis\nMean: {null_mean}\nSTD: {null_std}')
+#     print(f'Test Data\nMean: {test_mean}\nSTD: {test_std}')
+#     return p
+def t_test(df, start, year):
+    a = restrict_to_year_col(restrict(data), start, 'numcol')
+    b = restrict_to_year_col(restrict(data), year, 'numcol')
+    return stats.ttest_ind(a,b, equal_var=False)[1]
 
-def p_trend(df, start, end, col):
+def p_trend(df, start, end):
     lst = []
     for year in range(start+1,end+1):
-        lst.append(hypothesis_testing(df, start, year, col))
+        lst.append(t_test(df, start, year))
     print(lst)
 
 if __name__ == '__main__':
     data = pd.read_csv('data/full.csv')
-    p_trend(data, 2008, 2019, 'numcol')
+    print(p_trend(data, 2008, 2019))
