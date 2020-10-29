@@ -47,14 +47,19 @@ H<sub>A</sub>: Our current &mu; > Our lowest &mu; </b>
 To quickly summarize we're starting with a null hypothesis that the average of our current population is actually the same as it was in 2008, at our lowest point in the dataset. Our alternative is that our current population average is actually higher. In our final step before collecting data we'll select an alpha value of .05, mainly because it's good standard and I want to feel confident in the result.
 
 Now in order to test this we'll need to find estimations of the population average for 2008 and 2019 as well as the variance of that estimation in 2008. Since we're working with essentially a single sample for each year with a sample size of 39 we'll have to rely on [bootstrapping](https://en.wikipedia.org/wiki/Bootstrapping_%28statistics%29) for those estimations. Our final consideration before doing that analysis though has to be the outliers we discovered earlier. Seeing as they are so distant from the mean, and also represent states that barely felt the effects of CCD we're going to be discounting them to focus on the recovery of the rest of the country.
-
-The exact process can be found in src/hypothesis_testing.py but in short 10*6 resamples were taken from our 2008 and 2019 and means were compared leading to a p-Value of .08. While close this doesn't reach the threshold we set and as such we can't reject our null hypothesis.
+<p align='center'> 
+<img src='images/bootstrap.png' alt='Bootstrapping results'>
+</p>
+The exact process can be found in src/hypothesis_testing.py but in short 10*6 resamples were taken from each 2008 and 2019 and means were compared leading to a p-Value of .08. While close this doesn't reach the threshold we set and as such we can't reject our null hypothesis.
 
 ## The Honey Industry
 Run through visualizations of honey production metrics, show the strong correlation between price and total value and the non-existent correlation elsewhere. Look into honey industry reports for some kind of explanation or elaboration.
 
 ## Conclusion
 Overall hopeful outlook even without a nice p-value (maybe a graph of p values from 09 onward showing a trend?) Maybe highlight how insane ND is.
+<p align='center'> 
+<img src='images/p_value_trend.png' alt='Bootstrapping results'>
+</p>
 
 ## Sources and acknowledgements
 Self-explanatory
