@@ -25,25 +25,31 @@ Our first question of how bee populations have responded in the wake of CCD is a
 <p align='center'>
 <img src='images/avg_cols.png' alt='Average colonies'>
 </p>
+
 Now right off the bat I for one was surprised at this rate of loss in 2004-2008. While it's clear to see I was expecting something a lot more drastic based on what I knew about CCD. While this dip does represent a loss of tens of thousands of hives I expected more severity. As for the recovery of colonies it appears that we have not only returned to but surpassed colony levels from before CCD. But this is afterall an average, so maybe the picture will be clearer if we break it down by state.
 
 <p align='center'>
-<img src='images/map_2008.png' alt='Map of colonies in 2008'>
-<img src='images/map_2019.png' alt='Map of colonies in 2019'>
+<img src='images/map_2008.png' alt='Map of colonies in 2008', width=800>
+<img src='images/map_2019.png' alt='Map of colonies in 2019', width=800>
 </p>
+
 Looking at these a few things caught my attention. Firstly while there does seem to be a definite increase in hives it doesn't appear that dramatic. Secondly there seems to be no change in North Dakota, South Dakota, and California. In fact they seem to have had plentiful hives even at the lowest point nationally in the past 21 years. I was curious how their numbers looked compared to the national trend.
+
 <p align='center'>
 <img src='images/avg_vs_large.png' alt='Map of colonies in 2008'>
 </p>
+
 And we can immediately see that they are outliers to put it mildly. At the lowest point in South Dakota's hit still had roughly 3 times as many colonies as the national average. While good news on whole, knowing that CCD hasn't been more than a speed bump to the growth in ND and SD and only a slight contributor to the general decline in CA, these incredibly high numbers are going to pose a challenge in trying to see if the rest of the country has recovered.
 
 ## Hypothesis Testing
 Well our first step, as always with hypothesis testing, is to come up with some hypotheses. In particular our null and alternative:
+
 <p align='center'>
 <b>H<sub>0</sub>: &mu; of 2008 = &mu; of 2019<br>
 H<sub>A</sub>: &mu; of 2008 < &mu; of 2019</b>
 </p>
-To quickly summarize we're starting with a null hypothesis that the mean of our current population is actually the same as it was in 2008, at our lowest point in the dataset. Our alternative is that our current population average is actually higher. Our next two steps before we actually start doing math are settling on a test and selecting an alpha value. Since we're testing whether two samples are drawn from the same population or not the obvious answer is a [Students t-test](https://en.wikipedia.org/wiki/Student%27s_t-test) which was developed for this exact purpose. As for our alpha, how certain we want to be that they are in fact different, we'll go for the standard value of .05.
+
+To quickly summarize we're starting with a null hypothesis that the mean of our current population is actually the same as it was in 2008, at our lowest point in the dataset. Our alternative is that our current population average is actually higher. Our next two steps before we actually start doing math are settling on a test and selecting an alpha value. Since we're testing whether two samples are drawn from the same population or not the obvious answer is a [Student's t-test](https://en.wikipedia.org/wiki/Student%27s_t-test) which was developed for this exact purpose. As for our alpha, how certain we want to be that they are in fact different, we'll go for the standard value of .05.
 
 When we run our test using `scipy.stats.ttest_ind()` and feeding in our samples from 2008 and 2019 the results are less than exciting to put it plainly. We arrive at a p-value of .40, very much above our threshold of rejection. As such we've failed to reject our null hypothesis and we can't say that there's statistical evidence that bee populations have substantively recovered since 2008.
 
@@ -56,7 +62,4 @@ Well as it turns out even though we can't reject our null hypothesis currently I
 </p>
 While we don't have that many data points yet it does seem like a trend is emerging. So while it may not be time to open a bottle of champagne just yet, it looks like that day isn't too far away. We just have to wait and see where further data leads us.
 
-While we wait for that data, however, there is plenty of other things to dig into. In fact we haven't touched the majority of the data in our dataset that pertains to actual honey production. My next steps on this analysis are going to focus on how the honey industry has responded to the CCD crisis. Another point of interest moving forward will be
-
-## Sources and acknowledgements
-Self-explanatory
+While we wait for that data, however, there is plenty of other things to dig into. In fact we haven't touched the majority of the data in our dataset that pertains to actual honey production. My next steps on this analysis are going to focus on how the honey industry has responded to the CCD crisis. Another point of interest moving forward will be bringing in another report the NASS releases yearly which has information on rates of colony survivorship through winter. With that data it may be possible to see how much of this population behavior is due to lower rates of CCD and how much is due to more aggressive beekeeping strategies of propgating colonies.
