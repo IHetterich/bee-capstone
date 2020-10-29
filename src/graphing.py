@@ -1,34 +1,13 @@
+import argparse
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 import geopandas as geo
+from data_handler import *
 plt.style.use('ggplot')
 
-def get_data():
-    '''
-    Pulls data from the data directory and formats it into a fully usable form for graphing.
-    Particularly for geoplots.
-
-    Parameters
-    ----------
-    None - Some to follow when pipelining this functionality.
-
-    Returns
-    ----------
-    df_geo - Our full dataset with added geometry information for geoplotting
-    '''
-
-    full = pd.read_csv('../data/full.csv')
-    low_states = ['MD', 'NM', 'NV', 'OK', 'SC']
-    df = full[~full.state.isin(low_states)]
-    geodata = geo.read_file('../data/usa-states-census-2014.shp')
-    cut_geo = geodata[['STUSPS', 'geometry']].copy()
-    cut_geo.rename(columns={'STUSPS':'state'}, inplace=True)   
-    df_geo = cut_geo.merge(df, how='right', on='state')
-    return df_geo
-
-def geo_plot_cols(df_in, year):
+def geo_plot_cols(df_in, year, save_file):
     '''
     Plots the number of colonies in every state for the year indicated on a map of the US.
     It then saves the plot in the images folder with name numcols_{year}_map.png.
@@ -62,9 +41,9 @@ def geo_plot_cols(df_in, year):
         labelbottom=False,
         labelleft=False)
 
-    plt.savefig(f'../images/numcols_{year}_map.png')
+    plt.savefig(save_file)
 
-def plot_avg_col(df):
+def plot_avg_col(df, save_file):
     '''
     Plots and saves the average number of colonies over our window of time.
 
@@ -81,9 +60,9 @@ def plot_avg_col(df):
     ax.set_xlabel('Year', fontsize=15)
     ax.set_title('Average Number of Colonies per State', fontsize=20)
     plt.tight_layout()
-    plt.savefig('../images/avg_cols.png')
+    plt.savefig(save_file)
 
-def avg_vs_large(df):
+def avg_vs_large(df, save_file):
     '''
     Plots the national average against the colony numbers for ND, CA, SD.
 
@@ -106,35 +85,14 @@ def avg_vs_large(df):
     ax.set_xlabel('Years', fontsize=15)
     ax.set_ylabel('Number of Colonies')
     ax.legend()
-    plt.savefig('../images/avg_vs_large.png')
+    plt.savefig(save_file)
 
-def plot_bootstrapping():
-    '''
-    Plots the result of a bootstrap test. It's now outdated.
-    '''
-
-    mean = 36808.207
-    std = 6238.71
-    model = stats.norm(loc=mean, scale = std)
-    alt = 45574.8
-    alpha = model.ppf(.95)
-    x_range = np.linspace(mean - 4*std, mean + 4*std, 250)
-    fig, ax = plt.subplots()
-    ax.plot(x_range, model.pdf(x_range), label='Model of 2008 distribution')
-    ax.fill_between(x_range, model.pdf(x_range), where=(x_range>alpha), alpha=.2, label='alpha = .05')
-    ax.axvline(alt, linestyle='--', color='b', label='Bootstrap Estimate of 2019')
-    ax.set_xlabel('Average Number of Hives', fontsize=15)
-    ax.set_ylabel('Likelihood', fontsize=15)
-    ax.set_title('Bootstrapping Model and Result')
-    ax.legend(loc=2)
-    plt.savefig('../images/bootstrap.png')
-
-def graph_p_trend():
+def graph_p_trend(save_file):
     '''
     Graphs the p-values over a given number of years. Needs updating to 
     allow for input when called.
     '''
-    
+
     p = [0.8484881181188515, 0.6774445778008072, 0.8742513963611638, 0.7554420590236682, 0.5784368740046202, 0.46686840125275564, 0.5256868182957398, 0.3941496099894497, 0.4993195517295863, 0.4217370653718848, 0.4033256486903477]
     years = list(range(2009,2020))
     fig, ax = plt.subplots()
@@ -142,9 +100,23 @@ def graph_p_trend():
     ax.set_title('p-Values Over Time', fontsize=20)
     ax.set_xlabel('Years', fontsize=15)
     ax.set_ylabel('p-Values', fontsize=15)
-    plt.savefig('../images/p_value_trend.png')
+    plt.savefig(save_file)
 
 
 if __name__ == '__main__':
-    df = get_data()
-    graph_p_trend()
+    parser = argparse.ArgumentParser(description='Graphing functions')
+    parser.add_argument('-d', '--data', type=str,
+        default='/Users/ianhetterich/Desktop/Galvanize/capstones/bee-capstone/data/complete_data.csv', 
+        help='The raw data file path')
+    parser.add_argument('-g', '--graph', type=str, 
+        help='The final graph file path')
+    parser.add_argument('-y', '--year', type=int, default=2008, 
+        help='The year in question if applicable')
+    args = parser.parse_args()
+    source_path = args.data
+    save_path = args.graph
+    year = args.year
+
+    data = DataHandler(source_path).geo
+    geo_plot_cols(data, year, save_path)
+    

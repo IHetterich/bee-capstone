@@ -1,22 +1,8 @@
+import argparse
+from data_handler import *
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
-
-def restrict(df):
-    '''
-    Removes the information for states that do not have data for the full span of years, as well as outliers.
-
-    Parameters
-    ----------
-    df - A Pandas Dataframe containing the full dataset.
-
-    Returns
-    ----------
-    A Pandas Dataframe with 5 states removed.
-    '''
-
-    removal_states = ['MD', 'NM', 'NV', 'OK', 'SC', 'ND', 'CA', 'SD']
-    return df[~df.state.isin(removal_states)]
 
 def restrict_to_year_col(df, year, col):
     '''
@@ -38,71 +24,63 @@ def restrict_to_year_col(df, year, col):
 
     return df[df['year'] == year][col].to_numpy()
 
-# def bootstrap_mean(data, samples=10**6):
-#     '''
-#     Bootstraps a given sample to find an approximation of the mean of the population and 
-#     returns that mean and the standard deviation of that bootstrapped mean.
+def t_test(df, year1, year2):
+    '''
+    Takes in a dataframe and 2 years to test and returns the results 
+    of a Students t-test.
+    Parameters
+    ----------
+    df - The dataframe in question.
 
-#     Parameters
-#     ----------
-#     data - An ndarray of the sample we are bootstrapping.
+    year1 - One of the years to be tested.
 
-#     samples - The number of bootstraps to take, defaulted at 10,000.
+    year2 - The other year to be tested.
 
-#     Returns
-#     ----------
-#     mean - The result of the bootstrapped mean.
+    Returns
+    ----------
+    The results of the Student t-test, a tuple of t-statistic and p-value.
+    '''
 
-#     std - The standard deviation of the bootstrapped mean.
-#     '''
-
-#     bootstrap = []
-#     for i in range(samples):
-#         sample = np.random.choice(data, size=len(data), replace=True)
-#         bootstrap.append(np.mean(sample))
-#     return np.mean(bootstrap), np.std(bootstrap)
-
-# def hypothesis_testing(df, null_year, test_year, col):
-#     '''
-#     Takes in a dataframe, a year for the null hypothesis, a year for an alternate hypothesis
-#     and a column to test in the data frame. Pulls relevant data from the dataframe and then 
-#     bootstraps a mean to contruct a normally distributed fit for generating a p-value. It then
-#     prints out the p-value that was found, as well as the mean and std from the bootstrapping.
-
-#     Parameters
-#     ----------
-#     df - A dataframe containing all the data in question.
-
-#     null_year - The year of data we are using to construct our null hypothesis.
-
-#     test_year - The year of data we are using to test out null hypothesis.
-
-#     col - The column of data fro the dataframe that we are testing.
-#     '''
-#     null_data = restrict_to_year_col(restrict(df), null_year, col)
-#     test_data = restrict_to_year_col(restrict(df), test_year, col)
-
-#     null_mean, null_std = bootstrap_mean(null_data)
-#     test_mean, test_std = bootstrap_mean(test_data)
-
-#     null_dist = stats.norm(loc=null_mean, scale = null_std)
-#     p = 1 - null_dist.cdf(test_mean)
-
-#     print(f'p-Value: {p}')
-#     print(f'Null hypothesis\nMean: {null_mean}\nSTD: {null_std}')
-#     print(f'Test Data\nMean: {test_mean}\nSTD: {test_std}')
-#     return p
-def t_test(df, start, year):
-    a = restrict_to_year_col(restrict(data), start, 'numcol')
-    b = restrict_to_year_col(restrict(data), year, 'numcol')
+    a = restrict_to_year_col(df, year1, 'numcol')
+    b = restrict_to_year_col(df, year2, 'numcol')
     return stats.ttest_ind(a,b, equal_var=False)[1]
 
 def p_trend(df, start, end):
+    '''
+    Runs a t_test for the range of years input and returns a list of their p-values.
+
+    Parameters
+    ----------
+    df - The dataframe we are pulling numbers from.
+
+    start - The initial year we are comparing the other to.
+
+    end - The final year to be tested.
+
+    Returns
+    ----------
+    lst - A list of the p-values in the specified range.
+    '''
+
     lst = []
     for year in range(start+1,end+1):
         lst.append(t_test(df, start, year))
     print(lst)
+    return lst
 
 if __name__ == '__main__':
-    data = pd.read_csv('data/full.csv')
-    print(p_trend(data, 2008, 2019))
+    parser = argparse.ArgumentParser(description='Graphing functions')
+    parser.add_argument('-d', '--data', type=str, 
+        default='/Users/ianhetterich/Desktop/Galvanize/capstones/bee-capstone/data/complete_data.csv', 
+        help='The raw data file path')
+    parser.add_argument('-a', '--year_a', type=int, default=2008, 
+        help='Lower year')
+    parser.add_argument('-b', '--year_b', type=int, default=2008, 
+        help='Higher year')
+    args = parser.parse_args()
+    source_path = args.data
+    a_year = args.year_a
+    b_year = args.year_b
+
+    data = DataHandler(source_path).stat
+    p_trend(data, a_year, b_year)
