@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 import pandas as pd
 
@@ -64,11 +65,14 @@ def clean_raw_data(file, num):
 
 def collate_raw(lst):
     '''
-    Takes in any number of raw data text files and merges them into a single Pandas Dataframe using clean_raw_data.
+    Takes in any number of raw data text files and merges them into a single 
+    Pandas Dataframe using clean_raw_data. Was used for initial cleaning
+    now kept here in case of file loss and recreation.
 
     Parameters
     ----------
-    lst - A list of sublist, each sublist containing a file path and associated year as needed by clean_raw_data.
+    lst - A list of sublist, each sublist containing a file path and 
+    associated year as needed by clean_raw_data.
 
     Return
     ----------
@@ -82,7 +86,8 @@ def collate_raw(lst):
 
 def write_csv(original, new, file_path):
     '''
-    Combines newly cleaned data  with any pre-existing cleaned data and writes a new csv file of said combination.
+    Combines newly cleaned data  with any pre-existing cleaned data and writes 
+    a new csv file of said combination.
 
     Parameters
     ----------
@@ -90,7 +95,8 @@ def write_csv(original, new, file_path):
 
     new - A Pandas Dataframe of any newly cleaned data.
 
-    file_path - A filepath to where the newly combined dataframe should be saved as a .csv file.
+    file_path - A filepath to where the newly combined dataframe should be 
+        saved as a .csv file.
     '''
 
     full = pd.concat([original, new], ignore_index=True)
@@ -98,15 +104,22 @@ def write_csv(original, new, file_path):
 
 
 if __name__ == '__main__':
-    years = [['data/2013.txt', 2013],
-            ['data/2014.txt', 2014],
-            ['data/2015.txt', 2015],
-            ['data/2016.txt', 2016],
-            ['data/2017.txt', 2017],
-            ['data/2018.txt', 2018],
-            ['data/2019.txt', 2019]]
+    parser = argparse.ArgumentParser(description='Graphing functions')
+    parser.add_argument('-d', '--data', type=str, 
+        default='/Users/ianhetterich/Desktop/Galvanize/capstones/bee-capstone/data/complete_data.csv', 
+        help='The file path to the base dataset')
+    parser.add_argument('-n', '--new_data', type=str, 
+        help='The file path to the new year of data being added')
+    parser.add_argument('-y', '--year', type=int, help='The year being added')
+    parser.add_argument('-f', '--final', type=str, 
+        help='The filepath to save the new csv')
+    args = parser.parse_args()
+    old = args.data
+    new = args.new_data
+    year = args.years
+    final = args.final
 
-    new = collate_raw(years)
-    old = pd.read_csv('data/honeyproduction.csv')
+    addition = clean_raw_data(new, year)
+    original = pd.read_csv(old)
 
-    write_csv(old, new, 'data/full.csv')
+    write_csv(original, addition, final)

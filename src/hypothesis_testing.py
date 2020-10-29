@@ -1,5 +1,5 @@
 import argparse
-from data_handler import *
+from data_handler import DataHandler
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
@@ -69,7 +69,7 @@ def p_trend(df, start, end):
     return lst
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Graphing functions')
+    parser = argparse.ArgumentParser(description='Statistical functions')
     parser.add_argument('-d', '--data', type=str, 
         default='/Users/ianhetterich/Desktop/Galvanize/capstones/bee-capstone/data/complete_data.csv', 
         help='The raw data file path')
@@ -83,4 +83,8 @@ if __name__ == '__main__':
     b_year = args.year_b
 
     data = DataHandler(source_path).stat
+
+    #To Do: Add in an additional argument and a conditional gate to 
+    # specify graph
+
     p_trend(data, a_year, b_year)

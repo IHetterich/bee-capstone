@@ -4,7 +4,7 @@ import pandas as pd
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 import geopandas as geo
-from data_handler import *
+from data_handler import DataHandler
 plt.style.use('ggplot')
 
 def geo_plot_cols(df_in, year, save_file):
@@ -118,5 +118,9 @@ if __name__ == '__main__':
     year = args.year
 
     data = DataHandler(source_path).geo
+
+    #To Do: Add in an additional argument and a conditional gate to 
+    # specify functionality
+
     geo_plot_cols(data, year, save_path)
     
