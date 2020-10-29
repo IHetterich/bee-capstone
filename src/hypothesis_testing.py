@@ -91,7 +91,14 @@ def hypothesis_testing(df, null_year, test_year, col):
     print(f'p-Value: {p}')
     print(f'Null hypothesis\nMean: {null_mean}\nSTD: {null_std}')
     print(f'Test Data\nMean: {test_mean}\nSTD: {test_std}')
+    return p
+
+def p_trend(df, start, end, col):
+    lst = []
+    for year in range(start+1,end+1):
+        lst.append(hypothesis_testing(df, start, year, col))
+    print(lst)
 
 if __name__ == '__main__':
     data = pd.read_csv('data/full.csv')
-    hypothesis_testing(data, 2008, 2019, 'numcol')
+    p_trend(data, 2008, 2019, 'numcol')

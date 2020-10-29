@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 import geopandas as geo
 plt.style.use('ggplot')
@@ -89,7 +90,7 @@ def avg_vs_large(df):
     sd = df[df['state'] == 'SD']
     fig, ax = plt.subplots(figsize=(10,5))
     ax.plot(nd['year'], nd['numcol'], label='North Dakota', color='b', linewidth=2)
-    ax.plot(ca['year'], ca['numcol'], label='California', color='olive', linewidth=2)
+    ax.plot(ca['year'], ca['numcol'], label='California', color='k', linewidth=2)
     ax.plot(sd['year'], sd['numcol'], label='South Dakota', color='m', linewidth=2)
     ax.plot(avgs['year'], avgs['numcol'], label='National Average', color='r', linewidth=2)
     ax.set_ylim(0,540000)
@@ -99,6 +100,31 @@ def avg_vs_large(df):
     ax.legend()
     plt.savefig('../images/avg_vs_large.png')
 
+def plot_bootstrapping():
+    mean = 36808.207
+    std = 6238.71
+    model = stats.norm(loc=mean, scale = std)
+    alt = 45574.8
+    alpha = model.ppf(.95)
+    x_range = np.linspace(mean - 4*std, mean + 4*std, 250)
+    fig, ax = plt.subplots()
+    ax.plot(x_range, model.pdf(x_range), label='Model of 2008 distribution')
+    ax.fill_between(x_range, model.pdf(x_range), where=(x_range>alpha), alpha=.2, label='alpha = .05')
+    ax.axvline(alt, linestyle='--', color='b', label='Bootstrap Estimate of 2019')
+    ax.set_xlabel('Average Number of Hives', fontsize=15)
+    ax.set_ylabel('Likelihood', fontsize=15)
+    ax.set_title('Bootstrapping Model and Result')
+    ax.legend(loc=2)
+    plt.savefig('../images/bootstrap.png')
+
+def graph_p_trend():
+    p = [0.3862232280335094, 0.2534236075018639, 0.4047977807203983, 0.3139966169088154, 0.17816875285764522, 0.10210491385477227, 0.14679809921295872, 0.07497801965410111, 0.13358829420777574, 0.0864766216030779, 0.07980551371784905]
+    years = list(range(2009,2020))
+    fig, ax = plt.subplots()
+    ax.plot(years, p)
+    plt.savefig('../images/p_value_trend.png')
+
+
 if __name__ == '__main__':
     df = get_data()
-    avg_vs_large(df)
+    graph_p_trend()
