@@ -84,6 +84,14 @@ def plot_avg_col(df):
     plt.savefig('../images/avg_cols.png')
 
 def avg_vs_large(df):
+    '''
+    Plots the national average against the colony numbers for ND, CA, SD.
+
+    Parameters
+    ----------
+    df - The dataframe we're pulling our graphing data from.
+    '''
+
     avgs = df.groupby('year').mean().reset_index()
     nd = df[df['state'] == 'ND']
     ca = df[df['state'] == 'CA']
@@ -101,6 +109,10 @@ def avg_vs_large(df):
     plt.savefig('../images/avg_vs_large.png')
 
 def plot_bootstrapping():
+    '''
+    Plots the result of a bootstrap test. It's now outdated.
+    '''
+
     mean = 36808.207
     std = 6238.71
     model = stats.norm(loc=mean, scale = std)
@@ -118,6 +130,11 @@ def plot_bootstrapping():
     plt.savefig('../images/bootstrap.png')
 
 def graph_p_trend():
+    '''
+    Graphs the p-values over a given number of years. Needs updating to 
+    allow for input when called.
+    '''
+    
     p = [0.8484881181188515, 0.6774445778008072, 0.8742513963611638, 0.7554420590236682, 0.5784368740046202, 0.46686840125275564, 0.5256868182957398, 0.3941496099894497, 0.4993195517295863, 0.4217370653718848, 0.4033256486903477]
     years = list(range(2009,2020))
     fig, ax = plt.subplots()
