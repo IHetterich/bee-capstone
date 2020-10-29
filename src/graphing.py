@@ -10,8 +10,9 @@ plt.style.use('ggplot')
 
 def geo_plot_cols(df_in, year, save_file):
     '''
-    Plots the number of colonies in every state for the year indicated on a map of the US.
-    It then saves the plot in the images folder with name numcols_{year}_map.png.
+    Plots the number of colonies in every state for the year indicated on a 
+    map of the US. It then saves the plot in the images folder with name 
+    numcols_{year}_map.png.
 
     Parameters
     ----------
@@ -25,8 +26,9 @@ def geo_plot_cols(df_in, year, save_file):
     '''
     df = df_in[df_in['year'] == year].copy()
     df = df[df['state'] != 'HI']
-    fig = df.plot(column='numcol', figsize=(13,13), legend=True, scheme='user_defined',\
-         cmap='Reds', classification_kwds={'bins':[10000, 30000, 50000, 100000, 150000, 200000]})
+    fig = df.plot(column='numcol', figsize=(13,13), legend=True,
+        scheme='user_defined', cmap='Reds',
+        classification_kwds={'bins':[10000, 30000, 50000, 100000, 150000, 200000]})
     leg = fig.get_legend()
     leg._loc = 4
     fig.set_title(f'Number of Hives by State in {year}', fontsize=20)
@@ -36,10 +38,10 @@ def geo_plot_cols(df_in, year, save_file):
         upper = label_text.split()[2]
         new_text = f'{float(lower):,.0f} - {float(upper):,.0f}'
         lbl.set_text(new_text)
-    plt.tick_params(                
-        bottom=False,      
-        left=False,         
-        labelbottom=False,
+    plt.tick_params(
+        bottom=False, 
+        left=False, 
+        labelbottom=False, 
         labelleft=False)
 
     plt.savefig(save_file)
@@ -122,8 +124,7 @@ if __name__ == '__main__':
     data = handler.geo
     p_data = handler.stat
 
-    #To Do: Add in an additional argument and a conditional gate to 
+    # To Do: Add in an additional argument and a conditional gate to 
     # specify functionality
 
     graph_p_trend(p_data, year, save_path)
-    

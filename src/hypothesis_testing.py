@@ -6,8 +6,8 @@ import scipy.stats as stats
 
 def restrict_to_year_col(df, year, col):
     '''
-    Restricts the input dataframe to the data of the given year and column and returns it
-    as a Numpy ndarray.
+    Restricts the input dataframe to the data of the given year and column 
+    and returns it as a Numpy ndarray.
 
     Parameters
     ----------
