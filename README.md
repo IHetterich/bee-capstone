@@ -53,6 +53,22 @@ To quickly summarize we're starting with a null hypothesis that the mean of our 
 
 The final consideration before running our test is whether we want to include ND, CA, and SD for the reasons discussed earlier. Since they represent such outliers both in terms of size and behavior we are discounting them for the moment. When we run our test using `scipy.stats.ttest_ind()` and feed in our samples from 2008 and 2019 the results are less than exciting to put it plainly. We arrive at a p-value of .40, very much above our threshold of rejection. As such we've failed to reject our null hypothesis and we can't say that there's statistical evidence that bee populations have substantively recovered since 2008.
 
+## Inferential Modeling
+Branching away from the population dynamics of american colonies and the question of significant recovery, or not, from CCD there are other questions to be asked of this data. One of the first of concern to me, especially in the light of CCD die offs is what steps can be taken to maintain the health of the honey industry itself. While there are many hobby apiarists it's safe to say that the majority of domestic hives in the country are operated for the purpose of commercial honey production. Ensuring that these hives are maintained and propogated requires their caretaking to be profitable. To that end I used inferential modeling to try and ascertain the factors that most influence the health of that market and the profitability of domestic honey production.
+
+Before diving into the resutls and take-aways from this modeling we should first cover the steps taken and features examined. Modeling was undertaken with use of a Random Forest Regressor as implemented by the SKLearn package. In terms of feature engineering Number of Colonies, Yield per Colony, and Stocks of Honey were used to predict Price per Unit on a state by state and year by year basis. Total production by state and total value of production by state were not examined as they're derived from these variables and give less actionable results for individual apiarists and apiary groups. Price per Unit was chosen as the target in the hopes that it could capture useful information for honey producers regardless of size. By ensuring a healthy price per unit both smaller and larger producers should hopefully be able to maintain profit margins.
+
+<p align='center'>
+<img src='images/production_pdp.png' alt='Partial Dependence Plots of Production Features'>
+</p>
+
+Looking first at our two features related to actual honey production we can see two clear trends. Firstly price per unit tends to increase as the number of colonies increases. Secondly the price per unit seems to peak when the yields per colony are on the lower side of our spectrum. Unfortunately inferential modeling doesn't give us more than these trends so it's impossible, especially for myself with limited domain knowledge, to understand why this might be. Regardless of the actual reasons behind it though the information can be acted upon. Additionally pursuing higher colony counts per state sounds wonderful in increasing the population and protecting against CCD.
+
+<p align='center'>
+<img src='images/stocks_pdp.png' alt='Stocks of honey per state'>
+</p>
+
+I seperated the depedence of stocked honey out for two reasons. Firstly it's not directly related to the production of honey and colony management. And secondly I have hesitations about the potential advice it gives. As we can see it suggests that higher honey prices by unit can be achieved by minimizing stores of honey on a state by state basis. While this makes sense in terms of some basic supply and demand theories it's a troubling thing to advise. Seeing as these stocks can bolster flagging production in off years eliminating them could endanger the overall health of the domestic industry. In an off year external sources could gain a larger portion of the market and potentially threaten the livelihood of domestic apiaries moving forward.
 ## Conclusion and Further Steps
 So where does this leave us? While it seems like the population is recovering when we look at the population trends we can't confirm that through hypothesis testing. So what good is a hunch without proof? How much longer do I have to lose sleep thinking about the threat that CCD poses to bee colonies?
 
@@ -60,9 +76,12 @@ Well as it turns out even though we can't reject our null hypothesis currently I
 <p align='center'> 
 <img src='images/p_value_trend.png' alt='Bootstrapping results'>
 </p>
+
 While we don't have that many data points yet it does seem like a trend is emerging. So while it may not be time to open a bottle of champagne just yet, it looks like that day is on the way. We just have to wait and see where further data leads us.
 
-While we wait for that data, however, there is plenty of other things to dig into. In fact we haven't touched the majority of the data in our dataset that pertains to actual honey production. My next steps on this analysis are going to focus on how the honey industry has responded to the CCD crisis. Another point of interest moving forward will be bringing in another report the NASS releases yearly which has information on rates of colony survivorship through winter. With that data it may be possible to see how much of this population behavior is due to lower rates of CCD and how much is due to more aggressive beekeeping strategies of propgating colonies.
+Of course in the meantime there are steps that can be taken to not only bolster domestic colony numbers to create buffers against CCD but to ensure the health of the domestic honey industry. Even just the baseline inferential modeling shown above can point to a path of maintaining domestic production and the profits required to continue.
+
+While we wait for that data, however, there is plenty of other things to dig into. A main point of interest moving forward will be bringing in another report the NASS releases yearly which has information on rates of colony survivorship through winter. With that data it may be possible to see how much of this population behavior is due to lower rates of CCD and how much is due to more aggressive beekeeping strategies of propgating colonies.
 
 ## Citations
 I would like to close out with just one more mention on the source of this data, and to thank the curators of both these sources for their work and diligence.
